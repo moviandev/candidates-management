@@ -1,6 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 
+const candidateRoutes = require('./routes/candidatesRoutes');
+
 const app = express();
 
 // Setting morgan to DEV to see in our logs the requests Status
@@ -10,7 +12,7 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use(express.json());
 
 // Middlewares Routes
-app.use('/api/v1/');
+app.use('/api/v1/candidates/', candidateRoutes);
 
 // Error Handler
 
