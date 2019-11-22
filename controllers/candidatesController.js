@@ -11,7 +11,7 @@ exports.getAllCandidates = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     results: candidate.length,
-    data: candidate
+    data: { candidate }
   });
 });
 
@@ -20,7 +20,7 @@ exports.createCandidates = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: 'created',
-    data: candidate
+    data: { candidate }
   });
 });
 
@@ -29,7 +29,7 @@ exports.getCandidateById = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: candidate
+    data: { candidate }
   });
 });
 
@@ -41,7 +41,7 @@ exports.updateCandidate = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'up-to-date',
-    data: candidate
+    data: { candidate }
   });
 });
 
