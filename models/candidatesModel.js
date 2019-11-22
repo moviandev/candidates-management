@@ -24,10 +24,23 @@ const candidateSchema = new mongoose.Schema({
   },
   obs: {
     type: String,
-    trim: true,
+    trim: true
+  },
+  lastSalary: {
+    type: Number,
     required: true
   },
-  benefits: String
+  benefits: {
+    type: String,
+    enum: [
+      'Vale refeição',
+      'Vale Alimentação',
+      'Plano médico',
+      'Cursos',
+      'Outros'
+    ]
+  },
+  benefitsDescriptions: String
 });
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
