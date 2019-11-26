@@ -1,12 +1,16 @@
 const Candidate = require('../models/candidatesModel');
 const catchAsync = require('../utils/catchAsync');
 const APIFeats = require('../utils/APIFeats');
+const AppError = require('../utils/appError');
 
 exports.getAllCandidates = catchAsync(async (req, res, next) => {
   // Executing query
   const feats = new APIFeats(Candidate.find(), req.query).sort();
 
   const candidate = await feats.query;
+
+  if (candidate.length === 0)
+    return next(new AppError('There is no candidate found', 404));
 
   res.status(200).json({
     status: 'success',
@@ -16,15 +20,7 @@ exports.getAllCandidates = catchAsync(async (req, res, next) => {
 });
 
 exports.createCandidates = catchAsync(async (req, res, next) => {
-  const candidate = await Candidate.create(
-    req.body.name,
-    req.body.phone,
-    req.body.mobile,
-    req.body.tech,
-    req.body.obs,
-    req.body.lastSalary,
-    req.body.benefits
-  );
+  const candidate = await Candidate.create(req.body);
 
   res.status(201).json({
     status: 'created',

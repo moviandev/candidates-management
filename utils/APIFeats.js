@@ -6,7 +6,7 @@ class APIFeats {
 
   sort() {
     // Cheking it has a query string
-    if (this.queryStirng.sort) {
+    if (this.queryString.sort) {
       // Formating data from req.query
       const sortBy = this.queryString.sort.split(',').join(' ');
 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const benefitsSchema = new mongoose.Schema({
   vr: { type: Number, default: 0 },
@@ -23,7 +24,14 @@ const candidateSchema = new mongoose.Schema({
     type: String,
     minlength: [15, 'The mobile number must have hits format (00) 0.0000-0000'],
     trim: true,
-    required: true
+    required: [true, 'Please provide a mobile number']
+  },
+  email: {
+    type: String,
+    required: [true, 'Please provide a valid email'],
+    trim: true,
+    unique: [true, `Someone already has this email, please check`],
+    validate: [validator.isEmail, 'This email is not valid try again']
   },
   tech: {
     type: String,
@@ -38,7 +46,7 @@ const candidateSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  benefits: [benefitsSchema]
+  benefits: benefitsSchema
 });
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
