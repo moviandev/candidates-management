@@ -28,9 +28,9 @@ const candidateSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique: true,
     required: [true, 'Please provide a valid email'],
     trim: true,
-    unique: [true, `Someone already has this email, please check`],
     validate: [validator.isEmail, 'This email is not valid try again']
   },
   tech: {
