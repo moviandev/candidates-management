@@ -16,7 +16,15 @@ exports.getAllCandidates = catchAsync(async (req, res, next) => {
 });
 
 exports.createCandidates = catchAsync(async (req, res, next) => {
-  const candidate = await Candidate.create(req.body);
+  const candidate = await Candidate.create(
+    req.body.name,
+    req.body.phone,
+    req.body.mobile,
+    req.body.tech,
+    req.body.obs,
+    req.body.lastSalary,
+    req.body.benefits
+  );
 
   res.status(201).json({
     status: 'created',

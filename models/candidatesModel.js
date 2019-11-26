@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+const benefitsSchema = new mongoose.Schema({
+  vr: { type: Number, default: 0 },
+  va: { type: Number, default: 0 },
+  pm: { type: Boolean, default: false },
+  cursos: { type: Boolean, default: false },
+  other: { type: String, default: '' }
+});
+
 const candidateSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -30,17 +38,7 @@ const candidateSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  benefits: {
-    type: String,
-    enum: [
-      'Vale refeição',
-      'Vale Alimentação',
-      'Plano médico',
-      'Cursos',
-      'Outros'
-    ]
-  },
-  benefitsDescriptions: String
+  benefits: [benefitsSchema]
 });
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
