@@ -31,6 +31,9 @@ exports.createCandidates = catchAsync(async (req, res, next) => {
 exports.getCandidateById = catchAsync(async (req, res, next) => {
   const candidate = await Candidate.findById(req.params.id);
 
+  if (!candidate)
+    return next(new AppError(`Candidate not found, try again`, 404));
+
   res.status(200).json({
     status: 'success',
     data: { candidate }
@@ -43,6 +46,9 @@ exports.updateCandidate = catchAsync(async (req, res, next) => {
     runValidators: true
   });
 
+  if (!candidate)
+    return next(new AppError('Candidate not found, please try again', 404));
+
   res.status(200).json({
     status: 'up-to-date',
     data: { candidate }
@@ -51,6 +57,9 @@ exports.updateCandidate = catchAsync(async (req, res, next) => {
 
 exports.deleteCandidate = catchAsync(async (req, res, next) => {
   const candidate = await Candidate.findByIdAndDelete(req.params.id);
+
+  if (!candidate)
+    return next(new AppError('Candidate not found, please try again', 404));
 
   res.status(204).json({
     status: 'deleted',
