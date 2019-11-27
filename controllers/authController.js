@@ -14,15 +14,41 @@ exports.signup = catchAsync(async (req, res, next) => {
   // Creating user
   const user = await User.create({ name, email, password, confirmPassword });
 
-  console.log(user._id);
-
   const token = sign(user._id);
-
-  console.log(token);
 
   res.status(201).json({
     status: 'created',
     token,
     data: user
+  });
+});
+
+exports.login = catchAsync(async (req, res, next) => {
+  // Desctruting req.body
+  const { email, password } = req.body;
+
+  // Checking if in the request exist an email and password
+  if (!email || !password)
+    return next(new AppError('To login is needed email and password', 401));
+
+  // Searches to user by its email and password
+  const user = await User.findOne({ email }).select('+password');
+
+  // Checking if the email and password are correct
+  if (!user || !(await user.checkingPasswords(password, user.password)))
+    return next(
+      new AppError(
+        'Email or password invalid, please try again with valid data',
+        401
+      )
+    );
+
+  // Passing token
+  const token = sign(user._id);
+
+  res.status(200).json({
+    status: 'logged',
+    token,
+    message: `Welcome ${user.name}`
   });
 });
