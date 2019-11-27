@@ -16,6 +16,20 @@ class APIFeats {
 
     return this;
   }
+
+  pagination() {
+    // Declaring page and limit variables, with it doesn't receive anything it'll have its prefixed values
+    const page = +this.queryString || 1;
+    const limit = +this.queryString || 100;
+
+    // Creating a skip
+    const skip = (page - 1) * limit;
+
+    // Setting query
+    this.query = this.query.skip(skip).limit(limit);
+
+    return this;
+  }
 }
 
 module.exports = APIFeats;
