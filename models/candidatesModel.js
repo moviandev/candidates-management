@@ -49,7 +49,8 @@ const candidateSchema = new mongoose.Schema(
       type: Number,
       required: true
     },
-    benefits: benefitsSchema
+    benefits: benefitsSchema,
+    createdBy: String
   },
   { timestamps: true }
 );
