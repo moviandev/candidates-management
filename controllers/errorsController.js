@@ -11,6 +11,12 @@ const handlingValidationErrorsDB = err => {
   return new AppError(msg, 400);
 };
 
+const handlingDuplicateErrors = err => {
+  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  const msg = `Duplicate field ${value}. Please try again!`;
+  return new AppError(msg, 400);
+};
+
 const sendErrorToProduction = (err, res) => {
   if (err.isOperational)
     res.status(err.statusCode).json({
@@ -21,6 +27,7 @@ const sendErrorToProduction = (err, res) => {
     global.console.log('ERROR === ===> ', err);
     res.status(500).json({
       status: 'Error',
+      error: err,
       message: 'Something went very wrong'
     });
   }
@@ -44,8 +51,9 @@ module.exports = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
     if (error.name === 'CastError') error = handlingCastErrorDB(error);
-    if (error.name === 'ValidatorError')
+    if (error.name === 'ValidationError')
       error = handlingValidationErrorsDB(error);
+    if (error.code === 11000) error = handlingDuplicateErrors(error);
 
     sendErrorToProduction(error, res);
   }
