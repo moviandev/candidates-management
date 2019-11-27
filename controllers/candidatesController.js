@@ -5,7 +5,7 @@ const AppError = require('../utils/appError');
 
 exports.getAllCandidates = catchAsync(async (req, res, next) => {
   // Executing query
-  const feats = new APIFeats(Candidate.find(), req.query).sort();
+  const feats = new APIFeats(Candidate.find(), req.query).sort().pagination(0);
 
   const candidate = await feats.query;
 
