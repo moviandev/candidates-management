@@ -10,10 +10,30 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = catchAsync(async (req, res, next) => {});
+exports.getUser = catchAsync(async (req, res, next) => {
+  const user = await User.find();
 
-exports.createUser = catchAsync(async (req, res, next) => {});
+  res.status(200).json({
+    status: 'success',
+    results: user.length,
+    data: [user]
+  });
+});
 
-exports.updateUser = catchAsync(async (req, res, next) => {});
+exports.createUser = catchAsync(async (req, res, next) => {
+  res.status(500).json({
+    message: 'Route not implemented'
+  });
+});
 
-exports.deleteUser = catchAsync(async (req, res, next) => {});
+exports.updateUser = catchAsync(async (req, res, next) => {
+  res.status(500).json({
+    message: 'Route not implemented'
+  });
+});
+
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  res.status(500).json({
+    message: 'Route not implemented'
+  });
+});
