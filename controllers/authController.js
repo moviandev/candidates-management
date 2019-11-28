@@ -11,9 +11,15 @@ const sign = id => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const { name, email, password, confirmPassword } = req.body;
+  const { name, email, password, confirmPassword, role } = req.body;
   // Creating user
-  const user = await User.create({ name, email, password, confirmPassword });
+  const user = await User.create({
+    name,
+    email,
+    password,
+    confirmPassword,
+    role
+  });
 
   const token = sign(user._id);
 
@@ -93,7 +99,7 @@ exports.protect = catchAsync(async (req, res, next) => {
       )
     );
 
-  res.user = user;
+  req.user = user;
   next();
 });
 
