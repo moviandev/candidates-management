@@ -11,14 +11,13 @@ const sign = id => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const { name, email, password, confirmPassword, role } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
   // Creating user
   const user = await User.create({
     name,
     email,
     password,
-    confirmPassword,
-    role
+    confirmPassword
   });
 
   const token = sign(user._id);
@@ -59,6 +58,15 @@ exports.login = catchAsync(async (req, res, next) => {
     message: `Welcome ${user.name}`
   });
 });
+
+exports.logout = (req, res, next) => {
+  req.headers.authorization = null;
+
+  res.status(200).json({
+    status: 'Logged out',
+    message: 'You are not logged in'
+  });
+};
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
