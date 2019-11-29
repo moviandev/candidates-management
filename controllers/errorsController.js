@@ -53,9 +53,8 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'Internal Error';
 
-  if (process.env.NODE_ENV === 'development') {
-    sendErrorToDevelopment(err, res);
-  } else if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'development') sendErrorToDevelopment(err, res);
+  else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
     if (error.name === 'CastError') error = handlingCastErrorDB(error);
     if (error.name === 'ValidationError')
