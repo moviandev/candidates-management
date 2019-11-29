@@ -7,7 +7,7 @@ const Router = express.Router();
 Router.post('/signup', auth.signup);
 Router.post('/login', auth.login);
 
-Router.get('/logout', auth.logout);
+Router.post('/logout', auth.logout);
 
 Router.route('/')
   .get(auth.protect, auth.restrictedTo('admin'), userController.getAllUsers)
