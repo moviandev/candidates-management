@@ -10,6 +10,16 @@ const sign = id => {
   });
 };
 
+const createSendToken = (status, statusCode, user, res) => {
+  const token = sign(user._id);
+
+  res.status(statusCode).json({
+    status: status,
+    token,
+    data: user
+  });
+};
+
 exports.signup = catchAsync(async (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body;
   // Creating user
@@ -20,13 +30,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     confirmPassword
   });
 
-  const token = sign(user._id);
-
-  res.status(201).json({
-    status: 'created',
-    token,
-    data: user
-  });
+  createSendToken('created', 201, user, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -50,13 +54,7 @@ exports.login = catchAsync(async (req, res, next) => {
     );
 
   // Passing token
-  const token = sign(user._id);
-
-  res.status(200).json({
-    status: 'logged',
-    token,
-    message: `Welcome ${user.name}`
-  });
+  createSendToken('success', 200, user, res);
 });
 
 exports.logout = (req, res, next) => {
@@ -118,3 +116,17 @@ exports.restrictedTo = (...roles) => {
     next();
   };
 };
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // 1) Get the user by its email and check it exits
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) return next(new AppError('Email does not exist', 404));
+
+  // 2) Generate the random token
+  const reset = user.resetToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  // 3) send email
+});
