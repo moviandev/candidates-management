@@ -186,3 +186,16 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     token
   });
 });
+
+exports.updateMyPassword = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password');
+
+  if (!(await user.checkingPasswords(req.body.currentPassword, user.password)))
+    return next(new AppError('Please inform your current password', 400));
+
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
+  await user.save();
+
+  createSendToken('success', 200, user, res);
+});

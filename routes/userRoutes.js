@@ -10,7 +10,9 @@ router.post('/login', auth.login);
 router.post('/logout', auth.logout);
 
 router.post('/forgotPassword', auth.forgotPassword);
-router.patch('/ /:token', auth.resetPassword);
+router.patch('/resetPassword/:token', auth.resetPassword);
+
+router.patch('/updateMyPassword', auth.protect, auth.updateMyPassword);
 
 router
   .route('/')
