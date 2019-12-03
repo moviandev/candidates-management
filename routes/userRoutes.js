@@ -10,6 +10,7 @@ router.post('/login', auth.login);
 router.post('/logout', auth.logout);
 
 router.post('/forgotPassword', auth.forgotPassword);
+router.patch('/ /:token', auth.resetPassword);
 
 router
   .route('/')
