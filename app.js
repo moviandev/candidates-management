@@ -10,6 +10,12 @@ const usersRoutes = require('./routes/userRoutes');
 
 const app = express();
 
+const limited = rateLimit({
+  max: process.env.MAX_RATE_LIMIT,
+  windowMs: 60 * 60 * 1000
+});
+app.use('/api', limited);
+
 // Setting morgan to DEV to see in our logs the requests Status
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
