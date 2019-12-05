@@ -12,9 +12,16 @@ const app = express();
 
 const limited = rateLimit({
   max: process.env.MAX_RATE_LIMIT,
-  windowMs: 60 * 60 * 1000
+  windowMs: 60 * 60 * 1000,
+  message: 'Wait 1h to try again'
 });
 app.use('/api', limited);
+
+const limitedLogin = rateLimit({
+  max: process.env.MAX_RATE_LIMIT_LOGIN,
+  windowMs: 60 * 60 * 1000
+});
+app.use('/api/v1/users/login', limitedLogin);
 
 // Setting morgan to DEV to see in our logs the requests Status
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
