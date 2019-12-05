@@ -57,6 +57,15 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndDelete(req.user.id, { active: false });
+
+  res.status(204).json({
+    status: 'deleted',
+    data: null
+  });
+});
+
 exports.createUser = catchAsync(async (req, res, next) => {
   res.status(500).json({
     message: 'Route not implemented'
