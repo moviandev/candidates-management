@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const AppError = require('./utils/appError');
 const globalErroHandling = require('./controllers/errorsController');
@@ -9,6 +10,7 @@ const candidateRoutes = require('./routes/candidatesRoutes');
 const usersRoutes = require('./routes/userRoutes');
 
 const app = express();
+app.use(helmet());
 
 const limited = rateLimit({
   max: process.env.MAX_RATE_LIMIT,
@@ -27,7 +29,7 @@ app.use('/api/v1/users/login', limitedLogin);
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Setting body parser
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 
 // Middlewares Routes
 app.use('/api/v1/candidates/', candidateRoutes);
