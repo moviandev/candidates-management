@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 const AppError = require('./utils/appError');
 const globalErroHandling = require('./controllers/errorsController');
@@ -24,6 +26,12 @@ const limitedLogin = rateLimit({
   windowMs: 60 * 60 * 1000
 });
 app.use('/api/v1/users/login', limitedLogin);
+
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data sanitization against cross site scripting attacks
+app.use(xss());
 
 // Setting morgan to DEV to see in our logs the requests Status
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
