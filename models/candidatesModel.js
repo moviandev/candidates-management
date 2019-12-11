@@ -50,10 +50,18 @@ const candidateSchema = new mongoose.Schema(
       required: true
     },
     benefits: benefitsSchema,
-    createdBy: String
+    createdBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    }
   },
   { timestamps: true }
 );
+
+candidateSchema.pre(/^find/, function(next) {
+  this.populate('createdBy');
+  next();
+});
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
 
