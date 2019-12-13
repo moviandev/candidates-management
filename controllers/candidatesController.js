@@ -2,6 +2,7 @@ const Candidate = require('../models/candidatesModel');
 const catchAsync = require('../utils/catchAsync');
 const APIFeats = require('../utils/APIFeats');
 const AppError = require('../utils/appError');
+const factory = require('./handlerFactoring');
 
 exports.getAllCandidates = catchAsync(async (req, res, next) => {
   // Executing query
@@ -19,14 +20,7 @@ exports.getAllCandidates = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createCandidates = catchAsync(async (req, res, next) => {
-  const candidate = await Candidate.create(req.body);
-
-  res.status(201).json({
-    status: 'created',
-    data: { candidate }
-  });
-});
+exports.createCandidates = factory.createOne(Candidate);
 
 exports.getCandidateById = catchAsync(async (req, res, next) => {
   const candidate = await Candidate.findById(req.params.id);
@@ -40,29 +34,6 @@ exports.getCandidateById = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateCandidate = catchAsync(async (req, res, next) => {
-  const candidate = await Candidate.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
+exports.updateCandidate = factory.updateOne(Candidate);
 
-  if (!candidate)
-    return next(new AppError('Candidate not found, please try again', 404));
-
-  res.status(200).json({
-    status: 'up-to-date',
-    data: { candidate }
-  });
-});
-
-exports.deleteCandidate = catchAsync(async (req, res, next) => {
-  const candidate = await Candidate.findByIdAndDelete(req.params.id);
-
-  if (!candidate)
-    return next(new AppError('Candidate not found, please try again', 404));
-
-  res.status(204).json({
-    status: 'deleted',
-    message: 'Candidate has been deleted'
-  });
-});
+exports.deleteCandidate = factory.deleteOne(Candidate);
