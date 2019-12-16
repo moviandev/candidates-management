@@ -12,19 +12,6 @@ exports.createOne = Model =>
     });
   });
 
-exports.getOne = Model =>
-  catchAsync(async (req, res, next) => {
-    const candidate = await Model.findById(req.params.id);
-
-    if (!candidate)
-      return next(new AppError(`Document not found, try again`, 404));
-
-    res.status(200).json({
-      status: 'success',
-      data: { candidate }
-    });
-  });
-
 exports.deleteOne = Model =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
@@ -68,5 +55,18 @@ exports.getAll = Model =>
       status: 'success',
       results: doc.length,
       data: { data: doc }
+    });
+  });
+
+exports.getOne = Model =>
+  catchAsync(async (req, res, next) => {
+    const candidate = await Model.findById(req.params.id);
+
+    if (!candidate)
+      return next(new AppError(`Document not found, try again`, 404));
+
+    res.status(200).json({
+      status: 'success',
+      data: { candidate }
     });
   });
