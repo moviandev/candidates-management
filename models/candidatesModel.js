@@ -59,7 +59,10 @@ const candidateSchema = new mongoose.Schema(
 );
 
 candidateSchema.pre(/^find/, function(next) {
-  this.populate('createdBy');
+  this.populate({
+    path: 'createdBy',
+    select: '-_id -__v -email -createdAt -role -updatedAt'
+  });
   next();
 });
 

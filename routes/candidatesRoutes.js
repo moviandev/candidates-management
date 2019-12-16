@@ -10,7 +10,7 @@ router.use(auth.restrictedTo('admin', 'recruiter'));
 router
   .route('/')
   .get(candidatesController.getAllCandidates)
-  .post(candidatesController.createCandidates);
+  .post(candidatesController.userId, candidatesController.createCandidates);
 
 router
   .route('/:id')
