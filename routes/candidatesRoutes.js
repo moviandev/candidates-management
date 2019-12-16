@@ -4,35 +4,17 @@ const candidatesController = require('../controllers/candidatesController');
 
 const router = express.Router();
 
+router.use(auth.protect);
+router.use(auth.restrictedTo('admin', 'recruiter'));
 router
   .route('/')
-  .get(
-    auth.protect,
-    auth.restrictedTo('admin', 'recruiter'),
-    candidatesController.getAllCandidates
-  )
-  .post(
-    auth.protect,
-    auth.restrictedTo('admin', 'recruiter'),
-    candidatesController.createCandidates
-  );
+  .get(candidatesController.getAllCandidates)
+  .post(candidatesController.createCandidates);
 
 router
   .route('/:id')
-  .get(
-    auth.protect,
-    auth.restrictedTo('admin', 'recruiter'),
-    candidatesController.getCandidateById
-  )
-  .patch(
-    auth.protect,
-    auth.restrictedTo('admin', 'recruiter'),
-    candidatesController.updateCandidate
-  )
-  .delete(
-    auth.protect,
-    auth.restrictedTo('admin', 'recruiter'),
-    candidatesController.deleteCandidate
-  );
+  .get(candidatesController.getCandidateById)
+  .patch(candidatesController.updateCandidate)
+  .delete(candidatesController.deleteCandidate);
 
 module.exports = router;
