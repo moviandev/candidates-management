@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErroHandling = require('./controllers/errorsController');
@@ -14,6 +15,9 @@ const usersRoutes = require('./routes/userRoutes');
 
 const app = express();
 app.use(helmet());
+
+app.use(cors());
+app.options('*', cors());
 
 const limited = rateLimit({
   max: process.env.MAX_RATE_LIMIT,
