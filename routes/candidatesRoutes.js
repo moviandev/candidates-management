@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(auth.protect);
 router.use(auth.restrictedTo('admin', 'recruiter'));
+
 router
   .route('/')
   .get(candidatesController.getAllCandidates)
