@@ -8,7 +8,7 @@ exports.createOne = Model =>
 
     res.status(201).json({
       status: 'created',
-      data: { doc }
+      data: doc
     });
   });
 
@@ -44,8 +44,9 @@ exports.updateOne = Model =>
 exports.getAll = Model =>
   catchAsync(async (req, res, next) => {
     // Executing query
+    console.log(req.query);
     const feats = new APIFeats(Model.find(), req.query).sort().pagination(0);
-
+    console.log(feats);
     const doc = await feats.query;
 
     if (doc.length === 0)
@@ -54,7 +55,7 @@ exports.getAll = Model =>
     res.status(200).json({
       status: 'success',
       results: doc.length,
-      data: { data: doc }
+      data: doc
     });
   });
 
