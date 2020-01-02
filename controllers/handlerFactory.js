@@ -44,9 +44,7 @@ exports.updateOne = Model =>
 exports.getAll = Model =>
   catchAsync(async (req, res, next) => {
     // Executing query
-    console.log(req.query);
     const feats = new APIFeats(Model.find(), req.query).sort().pagination(0);
-    console.log(feats);
     const doc = await feats.query;
 
     if (doc.length === 0)

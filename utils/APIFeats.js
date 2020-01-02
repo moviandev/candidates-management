@@ -20,7 +20,7 @@ class APIFeats {
   pagination() {
     // Declaring page and limit variables, with it doesn't receive anything it'll have its prefixed values
     const page = +this.queryString.page || 1;
-    const limit = +this.queryString.limit || 4;
+    const limit = +this.queryString.limit || 10;
 
     // Creating a skip
     const skip = (page - 1) * limit;
